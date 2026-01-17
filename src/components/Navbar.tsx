@@ -1,41 +1,86 @@
 'use client';
 
-import { Menu, Globe, User, ChevronDown } from 'lucide-react';
-import { useAppStore } from '@/store/useAppStore'; // Import Store
-import { translations } from '@/utils/translations'; // Import Kamus
+import { useState } from 'react';
+import { Menu, Globe, User, ChevronDown, Check } from 'lucide-react';
+import { useAppStore } from '@/store/useAppStore'; 
+import { translations } from '@/utils/translations'; 
 
 export default function Navbar() {
-  const { language, setLanguage } = useAppStore(); // Hubungkan ke Store
+  // Ambil state language, setLanguage, dan toggleSidebar dari store
+  const { language, setLanguage, toggleSidebar } = useAppStore(); 
+  const [isOpen, setIsOpen] = useState(false); // State untuk kontrol buka-tutup dropdown bahasa
   const t = translations[language];
 
+  const languages = [
+    { code: 'id', label: 'ID Indonesia', flag: '🇮🇩' },
+    { code: 'en', label: 'EN English', flag: '🇺🇸' },
+  ];
+
   return (
-    <nav className="h-16 border-b-2 border-gray-300 bg-white flex items-center justify-between px-6 sticky top-0 z-10 shadow-sm">
-      {/* Tombol Menu - Kontras Tinggi */}
+    <nav className="h-16 border-b-2 border-gray-200 bg-white flex items-center justify-between px-6 sticky top-0 z-50 shadow-sm">
+      {/* Tombol Menu - Sekarang terhubung ke toggleSidebar */}
       <div className="flex items-center gap-4">
-        <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-900 border border-transparent hover:border-gray-300">
+        <button 
+          onClick={toggleSidebar}
+          className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-900 border border-transparent hover:border-gray-300 active:scale-95"
+        >
           <Menu size={24} />
         </button>
       </div>
 
       <div className="flex items-center gap-6">
-        {/* Dropdown Bahasa - Dibuat Jelas dan Tidak Samar */}
-        <div className="flex items-center gap-2 border-2 border-gray-900 px-4 py-1.5 rounded-full hover:bg-gray-50 transition-all shadow-sm group">
-          <Globe size={18} className="text-blue-700 group-hover:rotate-12 transition-transform" />
-          <div className="flex items-center gap-1">
-            <select 
-              value={language} 
-              onChange={(e) => setLanguage(e.target.value as 'en' | 'id')}
-              className="bg-transparent text-xs font-black text-gray-900 focus:outline-none cursor-pointer uppercase tracking-tighter appearance-none pr-1"
-            >
-              <option value="id">ID Indonesia</option>
-              <option value="en">EN English</option>
-            </select>
-            <ChevronDown size={14} className="text-gray-900" />
-          </div>
+        {/* Custom Dropdown Bahasa */}
+        <div className="relative">
+          <button 
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center gap-2 border-2 border-gray-900 px-4 py-1.5 rounded-full hover:bg-gray-50 transition-all shadow-sm group bg-white"
+          >
+            <Globe size={18} className="text-blue-700 group-hover:rotate-12 transition-transform" />
+            <span className="text-xs font-black text-gray-900 uppercase tracking-tight">
+              {language === 'id' ? 'ID Indonesia' : 'EN English'}
+            </span>
+            <ChevronDown 
+              size={14} 
+              className={`text-gray-900 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+            />
+          </button>
+
+          {/* Dropdown Menu */}
+          {isOpen && (
+            <>
+              {/* Overlay untuk menutup saat klik di luar area dropdown */}
+              <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
+              
+              <div className="absolute right-0 mt-2 w-48 bg-white border-2 border-gray-900 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in duration-150">
+                <div className="py-1">
+                  {languages.map((item) => (
+                    <button
+                      key={item.code}
+                      onClick={() => {
+                        setLanguage(item.code as 'id' | 'en');
+                        setIsOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-4 py-3 text-xs font-bold transition-colors
+                        ${language === item.code 
+                          ? 'bg-blue-50 text-blue-700' 
+                          : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-base">{item.flag}</span>
+                        <span className="uppercase">{item.label}</span>
+                      </div>
+                      {language === item.code && <Check size={14} className="text-blue-700" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Info User - Teks dipertegas */}
-        <div className="flex items-center gap-3 border-l-2 border-gray-300 pl-6">
+        {/* Info User */}
+        <div className="flex items-center gap-3 border-l-2 border-gray-200 pl-6">
           <div className="flex flex-col items-end hidden md:flex">
             <span className="text-xs font-black text-gray-900 uppercase tracking-tight">
               Saiful Anwar
