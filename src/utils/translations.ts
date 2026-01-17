@@ -1,0 +1,100 @@
+export const translations = {
+  en: {
+    // Main Page
+    title: "Berry List",
+    subtitle: "Manage your poke-berries data and view details.",
+    addBtn: "Add Data",
+    searchPlaceholder: "Search berry by name...",
+    tableNo: "No",
+    tableName: "Name",
+    tableAction: "Action",
+    show: "Show",
+    entries: "entries per page",
+    page: "Page",
+    of: "of",
+    noData: "NO DATA FOUND",
+    fetching: "FETCHING DATA FROM POKEAPI...",
+
+    // Navigation & General
+    back: "Back to Berry List",
+    loading: "LOADING DATA...",
+    retry: "RETRY",
+
+    // Add & Edit Page
+    addTitle: "Add New Product",
+    editTitle: "Edit Product Info",
+    formSubtitleAdd: "Please fill in the details below to add a new item.",
+    formSubtitleEdit: "Update the product information as needed.",
+    formTitle: "Product Title",
+    formPrice: "Price ($)",
+    formDesc: "Description",
+    btnSave: "SAVE DATA",
+    btnUpdate: "UPDATE DATA",
+    successAdd: "Data added successfully!",
+    successUpdate: "Data updated successfully!",
+    failAdd: "Failed to add data.",
+    failUpdate: "Failed to update data.",
+
+    // Detail Page
+    detailHeader: "Berry Detail Information",
+    detailSub: "Detailed information about characteristics and flavors.",
+    statsTitle: "GROWTH STATISTICS",
+    flavorTitle: "FLAVOR PROFILE",
+    growthTime: "Growth Time",
+    maxHarvest: "Max Harvest",
+    size: "Size",
+    hours: "Hours",
+    items: "Items",
+    smoothnessDesc: "This berry has a smoothness level of",
+    smoothnessNote: "The higher the value, the easier it is to process!",
+  },
+  id: {
+    // Main Page
+    title: "Daftar Berry",
+    subtitle: "Kelola data poke-berry Anda dan lihat detailnya.",
+    addBtn: "Tambah Data",
+    searchPlaceholder: "Cari berry berdasarkan nama...",
+    tableNo: "No",
+    tableName: "Nama",
+    tableAction: "Aksi",
+    show: "Tampilkan",
+    entries: "data per halaman",
+    page: "Halaman",
+    of: "dari",
+    noData: "DATA TIDAK DITEMUKAN",
+    fetching: "MENGAMBIL DATA DARI POKEAPI...",
+
+    // Navigation & General
+    back: "Kembali ke Daftar Berry",
+    loading: "MEMUAT DATA...",
+    retry: "COBA LAGI",
+
+    // Add & Edit Page
+    addTitle: "Tambah Produk Baru",
+    editTitle: "Edit Info Produk",
+    formSubtitleAdd: "Silakan isi detail di bawah untuk menambah item baru.",
+    formSubtitleEdit: "Perbarui informasi produk sesuai kebutuhan.",
+    formTitle: "Nama Produk",
+    formPrice: "Harga ($)",
+    formDesc: "Deskripsi",
+    btnSave: "SIMPAN DATA",
+    btnUpdate: "PERBARUI DATA",
+    successAdd: "Data berhasil ditambahkan!",
+    successUpdate: "Data berhasil diperbarui!",
+    failAdd: "Gagal menambah data.",
+    failUpdate: "Gagal memperbarui data.",
+
+    // Detail Page
+    detailHeader: "Informasi Detail Berry",
+    detailSub: "Informasi detail mengenai karakteristik dan rasa.",
+    statsTitle: "STATISTIK PERTUMBUHAN",
+    flavorTitle: "PROFIL RASA",
+    growthTime: "Waktu Tumbuh",
+    maxHarvest: "Panen Maksimal",
+    size: "Ukuran",
+    hours: "Jam",
+    items: "Item",
+    smoothnessDesc: "Berry ini memiliki tingkat kelembutan sebesar",
+    smoothnessNote: "Semakin tinggi nilainya, semakin mudah berry ini diolah!",
+  }
+};
