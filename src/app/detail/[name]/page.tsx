@@ -7,11 +7,13 @@ import { ArrowLeft, Info, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useAppStore } from '@/store/useAppStore';
 import SkeletonDetail from '@/components/SkeletonDetail';
+import { translations } from '@/utils/translations'; // Import kamus bahasa
 
 export default function DetailBerryPage() {
   const { name } = useParams();
   const router = useRouter();
   const { language } = useAppStore();
+  const t = translations[language]; // Inisialisasi translasi berdasarkan bahasa terpilih
   
   const [berry, setBerry] = useState<any>(null);
   const [allBerries, setAllBerries] = useState<any[]>([]);
@@ -23,7 +25,6 @@ export default function DetailBerryPage() {
     const fetchList = async () => {
       try {
         const res = await pokeApi.get('berry?limit=100');
-        // PokeAPI secara default memberikan urutan berdasarkan ID
         setAllBerries(res.data.results);
       } catch (err) {
         console.error("Gagal memuat daftar dropdown", err);
@@ -39,34 +40,32 @@ export default function DetailBerryPage() {
         setLoading(true);
         const res = await pokeApi.get(`berry/${name}`);
         setBerry(res.data);
-        setSelectedBerry(name); // Sinkronkan pilihan dropdown dengan data saat ini
+        setSelectedBerry(name); 
       } catch (err) {
         console.error("Gagal memuat detail", err);
       } finally {
-        // Beri sedikit delay agar transisi skeleton terasa smooth
         setTimeout(() => setLoading(false), 500);
       }
     };
     fetchDetail();
   }, [name]);
 
-  // Fungsi untuk tombol GO sesuai persyaratan soal
   const handleGo = () => {
     if (selectedBerry) {
       router.push(`/detail/${selectedBerry}`);
     }
   };
 
-  // Menggunakan Skeleton Loading yang sudah dipisah
   if (loading) return <SkeletonDetail />;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       {/* Header & Navigation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* Tombol Kembali Multibahasa */}
         <Link href="/" className="flex items-center gap-2 text-blue-800 hover:text-blue-900 font-black uppercase text-sm group transition-colors">
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-          {language === 'id' ? 'KEMBALI KE DAFTAR' : 'BACK TO BERRY LIST'}
+          {t.backToBerryList || (language === 'id' ? 'KEMBALI KE DAFTAR' : 'BACK TO BERRY LIST')}
         </Link>
 
         {/* Dropdown Selector + Go Button */}
@@ -77,7 +76,6 @@ export default function DetailBerryPage() {
             className="px-4 py-2 bg-transparent font-black text-gray-900 outline-none cursor-pointer capitalize min-w-[180px]"
           >
             {allBerries.map((b) => {
-              // Mengambil ID dari URL (format: .../berry/1/)
               const id = b.url.split('/').filter(Boolean).pop();
               return (
                 <option key={id} value={b.name}>
@@ -114,18 +112,24 @@ export default function DetailBerryPage() {
 
         {/* Card Body */}
         <div className="p-10 space-y-8">
-          {/* Stats Grid */}
+          {/* Stats Grid - Label menggunakan t.size, t.growthTime, t.maxHarvest */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-blue-50 p-6 rounded-3xl border-2 border-blue-100 text-center">
-              <span className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Size</span>
+              <span className="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">
+                {t.size || "Size"}
+              </span>
               <span className="text-2xl font-black text-blue-900">{berry?.size} mm</span>
             </div>
             <div className="bg-purple-50 p-6 rounded-3xl border-2 border-purple-100 text-center">
-              <span className="block text-[10px] font-black text-purple-400 uppercase tracking-widest mb-1">Growth Time</span>
+              <span className="block text-[10px] font-black text-purple-400 uppercase tracking-widest mb-1">
+                {t.growthTime || "Growth Time"}
+              </span>
               <span className="text-2xl font-black text-purple-900">{berry?.growth_time}h</span>
             </div>
             <div className="bg-orange-50 p-6 rounded-3xl border-2 border-orange-100 text-center">
-              <span className="block text-[10px] font-black text-orange-400 uppercase tracking-widest mb-1">Max Harvest</span>
+              <span className="block text-[10px] font-black text-orange-400 uppercase tracking-widest mb-1">
+                {t.maxHarvest || "Max Harvest"}
+              </span>
               <span className="text-2xl font-black text-orange-900">{berry?.max_harvest}</span>
             </div>
           </div>

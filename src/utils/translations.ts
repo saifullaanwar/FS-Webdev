@@ -1,5 +1,10 @@
 export const translations = {
   en: {
+    // Sidebar & Navigation
+    listTable: "List Table",
+    addData: "Add Data",
+    backToBerryList: "BACK TO BERRY LIST",
+
     // Main Page
     title: "Berry List",
     subtitle: "Manage your poke-berries data and view details.",
@@ -22,14 +27,14 @@ export const translations = {
 
     // Add & Edit Page
     addTitle: "Add New Product",
-    editTitle: "Edit Product Info",
+    editTitle: "Edit Berry Info",
     formSubtitleAdd: "Please fill in the details below to add a new item.",
     formSubtitleEdit: "Update the product information as needed.",
     formTitle: "Product Title",
     formPrice: "Price ($)",
     formDesc: "Description",
     btnSave: "SAVE DATA",
-    btnUpdate: "UPDATE DATA",
+    btnUpdate: "UPDATE BERRY DATA",
     successAdd: "Data added successfully!",
     successUpdate: "Data updated successfully!",
     failAdd: "Failed to add data.",
@@ -49,6 +54,11 @@ export const translations = {
     smoothnessNote: "The higher the value, the easier it is to process!",
   },
   id: {
+    // Sidebar & Navigation
+    listTable: "Daftar Tabel",
+    addData: "Tambah Data",
+    backToBerryList: "KEMBALI KE DAFTAR",
+
     // Main Page
     title: "Daftar Berry",
     subtitle: "Kelola data poke-berry Anda dan lihat detailnya.",
@@ -71,14 +81,14 @@ export const translations = {
 
     // Add & Edit Page
     addTitle: "Tambah Produk Baru",
-    editTitle: "Edit Info Produk",
+    editTitle: "Ubah Info Berry",
     formSubtitleAdd: "Silakan isi detail di bawah untuk menambah item baru.",
     formSubtitleEdit: "Perbarui informasi produk sesuai kebutuhan.",
     formTitle: "Nama Produk",
     formPrice: "Harga ($)",
     formDesc: "Deskripsi",
     btnSave: "SIMPAN DATA",
-    btnUpdate: "PERBARUI DATA",
+    btnUpdate: "PERBARUI DATA BERRY",
     successAdd: "Data berhasil ditambahkan!",
     successUpdate: "Data berhasil diperbarui!",
     failAdd: "Gagal menambah data.",

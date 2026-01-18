@@ -16,9 +16,12 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { translations } from '@/utils/translations';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 export default function ListTablePage() {
-  // 1. Tambahkan state isClient untuk mencegah Hydration Error
   const [isClient, setIsClient] = useState(false);
 
   const { 
@@ -38,13 +41,12 @@ export default function ListTablePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 2. Efek untuk menandai bahwa komponen sudah terpasang di browser (client-side)
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (!isClient) return; // Jangan fetch sebelum client siap
+    if (!isClient) return;
 
     const controller = new AbortController();
 
@@ -75,7 +77,7 @@ export default function ListTablePage() {
 
     fetchBerries();
     return () => controller.abort();
-  }, [isClient, language]); // Tambahkan isClient sebagai dependency
+  }, [isClient, language]);
 
   const filteredData = berries
     .filter((b) => b.name.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -90,15 +92,43 @@ export default function ListTablePage() {
     setCurrentPage(1); 
   };
 
+  // Logika Delete dengan SweetAlert2 yang lebih menarik
   const handleDelete = (name: string) => {
-    const isConfirmed = confirm(`${language === 'id' ? 'Hapus' : 'Delete'} "${name}"?`);
-    if (isConfirmed) {
-      setBerries((prev) => prev.filter((item) => item.name !== name));
-      alert(`${name} ${language === 'id' ? 'berhasil dihapus.' : 'successfully deleted.'}`);
-    }
+    MySwal.fire({
+      title: language === 'id' ? `Hapus "${name}"?` : `Delete "${name}"?`,
+      text: language === 'id' 
+        ? "Data yang dihapus tidak dapat dikembalikan secara lokal!" 
+        : "You won't be able to revert this local change!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#1d4ed8', // Biru Tailwind (blue-700)
+      cancelButtonColor: '#d33',
+      confirmButtonText: language === 'id' ? 'Ya, Hapus!' : 'Yes, delete it!',
+      cancelButtonText: language === 'id' ? 'Batal' : 'Cancel',
+      customClass: {
+        popup: 'rounded-[2rem] border-2 border-gray-300 shadow-2xl',
+        title: 'font-black uppercase tracking-tight text-gray-900',
+        confirmButton: 'font-black uppercase tracking-widest px-6 py-3 rounded-xl',
+        cancelButton: 'font-black uppercase tracking-widest px-6 py-3 rounded-xl'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setBerries((prev) => prev.filter((item) => item.name !== name));
+        
+        MySwal.fire({
+          title: language === 'id' ? 'Terhapus!' : 'Deleted!',
+          text: `${name} ${language === 'id' ? 'berhasil dihapus.' : 'successfully deleted.'}`,
+          icon: 'success',
+          confirmButtonColor: '#1d4ed8',
+          customClass: {
+            popup: 'rounded-[2rem]',
+            confirmButton: 'rounded-xl font-black'
+          }
+        });
+      }
+    });
   };
 
-  // 3. Jika belum client-side, kembalikan null atau loader sederhana agar tidak ada mismatch
   if (!isClient) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -107,7 +137,6 @@ export default function ListTablePage() {
     );
   }
 
-  // Komponen Skeleton Row
   const SkeletonRow = () => (
     <tr className="animate-pulse">
       <td className="p-5 border-r border-gray-100">
@@ -128,32 +157,6 @@ export default function ListTablePage() {
 
   return (
     <div className="space-y-6">
-      {/* Language Switcher Section */}
-      <div className="flex justify-end items-center gap-3">
-        <div className="flex items-center gap-2 text-gray-900 font-black text-sm uppercase">
-          <Languages size={18} />
-          <span>Language:</span>
-        </div>
-        <div className="inline-flex bg-gray-200 p-1 rounded-lg border border-gray-400 shadow-sm">
-          <button 
-            onClick={() => setLanguage('id')}
-            className={`px-4 py-1.5 rounded-md text-sm font-black transition-all ${
-              language === 'id' ? 'bg-blue-700 text-white shadow-md' : 'text-gray-700 hover:text-gray-900'
-            }`}
-          >
-            ID
-          </button>
-          <button 
-            onClick={() => setLanguage('en')}
-            className={`px-4 py-1.5 rounded-md text-sm font-black transition-all ${
-              language === 'en' ? 'bg-blue-700 text-white shadow-md' : 'text-gray-700 hover:text-gray-900'
-            }`}
-          >
-            EN
-          </button>
-        </div>
-      </div>
-
       {/* Header Section */}
       <div className="flex justify-between items-center bg-white p-6 rounded-2xl border-2 border-gray-300 shadow-sm">
         <div>

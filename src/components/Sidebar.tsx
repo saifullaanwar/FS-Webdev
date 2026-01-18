@@ -4,17 +4,19 @@ import Link from 'next/link';
 import { Database, PlusCircle } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
 import { usePathname } from 'next/navigation';
+import { translations } from '@/utils/translations'; // Impor kamus bahasa
 
 export default function Sidebar() {
-  const { isSidebarOpen } = useAppStore();
+  const { isSidebarOpen, language } = useAppStore(); // Ambil state language
   const pathname = usePathname();
+  const t = translations[language]; // Inisialisasi translasi
 
   return (
     <aside 
       className={`h-screen bg-white border-r-2 border-gray-300 p-4 flex flex-col transition-all duration-300 ease-in-out overflow-hidden
         ${isSidebarOpen ? 'w-64' : 'w-20'}`}
     >
-      {/* Judul/Logo - Teks disembunyikan saat sidebar tertutup */}
+      {/* Judul/Logo */}
       <div className={`mb-6 px-2 transition-all duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 h-8 flex items-center justify-center'}`}>
         {isSidebarOpen ? (
           <span className="font-black text-2xl text-gray-900 tracking-tighter whitespace-nowrap">
@@ -26,20 +28,20 @@ export default function Sidebar() {
       </div>
       
       <nav className="flex flex-col gap-3">
-        {/* Link List Table */}
+        {/* Link List Table - Menggunakan t.listTable */}
         <SidebarLink 
           href="/" 
           icon={<Database size={22} />} 
-          label="List Table" 
+          label={t.listTable || "List Table"} 
           isOpen={isSidebarOpen} 
           active={pathname === '/'} 
         />
         
-        {/* Link Add Data */}
+        {/* Link Add Data - Menggunakan t.addData */}
         <SidebarLink 
           href="/add" 
           icon={<PlusCircle size={22} />} 
-          label="Add Data" 
+          label={t.addData || "Add Data"} 
           isOpen={isSidebarOpen} 
           active={pathname === '/add'} 
         />
@@ -55,7 +57,6 @@ export default function Sidebar() {
   );
 }
 
-// Komponen Pembantu agar kode lebih bersih
 function SidebarLink({ href, icon, label, isOpen, active }: { href: string, icon: React.ReactNode, label: string, isOpen: boolean, active: boolean }) {
   return (
     <Link 
